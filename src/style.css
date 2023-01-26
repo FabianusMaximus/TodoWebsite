@@ -1,4 +1,75 @@
-body{
+body {
     font-family: "Calibri Light", serif;
-    font-size: 12px;
+    font-size: 1em;
+
+    background-image: url("../img/backgroundIMG.jpg");
+    background-repeat: no-repeat;
+    height: 98vh;
+    background-position: center;
+    background-size: cover;
+    background-attachment: fixed;
+}
+
+.wrapper {
+    height: calc(100% - 30px);
+    margin-left: 10px;
+    margin-right: 10px;
+    background-color: white;
+}
+
+.element {
+    display: flow;
+    background-color: white;
+    border: solid white;
+    margin: 5px;
+    padding: 10px;
+    text-align: center;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.kanbanHeader {
+    font-size: 1.2em;
+    padding: 10px;
+    font-weight: bold;
+    height: 2em;
+}
+
+.kanban {
+    margin: 10px;
+    width: 200px;
+    height: 100%;
+    vertical-align: top;
+
+
+}
+
+.board {
+    background-color: white;
+}
+
+.wrapper, .element, .kanban {
+    border-radius: 5px;
+}
+
+#content {
+    display: flex;
+}
+
+#content {
+    height: 100%;
+}
+
+#open {
+    flex: 1;
+    background-color: #9dff85;
+}
+
+#working {
+    flex: 1;
+    background-color: #fffb85;
+}
+
+#closed {
+    flex: 1;
+    background-color: #ff8585;
 }
