@@ -14,28 +14,18 @@
 
 <div class="" id="content">
     <div class="kanban" id="open" ondrop="drop(event)" ondragover="allowDrop(event)">
-        <div class="wrapper" id="0" onclick="createNewElement(event)">
+        <div class="wrapper" id="wrapper0" ondblclick="createNewElement(event)">
             <p class="kanbanHeader">To do</p>
-            <p class="element" id="element1" draggable="true" ondragstart="drag(event)">hier schreibe ich was
-                rein</p>
-            <p class="element" id="element2" draggable="true" ondragstart="drag(event)">noch ein Element</p>
         </div>
     </div>
     <div class="kanban" id="working" ondrop="drop(event)" ondragover="allowDrop(event)">
-        <div class="wrapper">
+        <div class="wrapper" id="wrapper1" ondblclick="createNewElement(event)">
             <p class="kanbanHeader">Doing</p>
-            <p class="element" id="element3" draggable="true" ondragstart="drag(event)" ondblclick="editElement(event)">
-                hier schreibe ich was
-                rein</p>
-            <p class="element" id="element4" draggable="true" ondragstart="drag(event)">noch ein Element</p>
         </div>
     </div>
     <div class="kanban" id="closed" ondrop="drop(event)" ondragover="allowDrop(event)">
-        <div class="wrapper">
+        <div class="wrapper" id="wrapper2" ondblclick="createNewElement(event)">
             <p class="kanbanHeader">Done</p>
-            <p class="element" id="element5" draggable="true" ondragstart="drag(event)">hier schreibe ich was
-                rein</p>
-            <p class="element" id="element6" draggable="true" ondragstart="drag(event)">noch ein Element</p>
         </div>
     </div>
 </div>
