@@ -1,23 +1,119 @@
 [
-  {
-    "type": "Element",
-    "value": "element0",
-    "id": "wrapper0",
-    "parentID": "",
-    "children": null
-  },
-  {
-    "type": "Element",
-    "value": "element1",
-    "id": "wrapper0",
-    "parentID": "",
-    "children": null
-  },
-  {
-    "type": "Element",
-    "value": "element2",
-    "id": "wrapper0",
-    "parentID": "",
-    "children": null
-  }
+  [
+    {
+      "type": "Element",
+      "value": "",
+      "id": "kanban3",
+      "parentID": "content",
+      "children": []
+    },
+    {
+      "type": "Element",
+      "value": ".",
+      "id": "kanban4",
+      "parentID": "content",
+      "children": [
+        "wrapper4"
+      ]
+    }
+  ],
+  [
+    {
+      "type": "Element",
+      "value": "To do",
+      "id": "header0",
+      "parentID": "wrapper0",
+      "children": []
+    },
+    {
+      "type": "Element",
+      "value": "Doing",
+      "id": "header1",
+      "parentID": "wrapper1",
+      "children": []
+    },
+    {
+      "type": "Element",
+      "value": "Done",
+      "id": "header2",
+      "parentID": "wrapper2",
+      "children": []
+    },
+    {
+      "type": "Element",
+      "value": "test",
+      "id": "header3",
+      "parentID": "wrapper3",
+      "children": [
+        "inputElement"
+      ]
+    },
+    {
+      "type": "Element",
+      "value": "test2",
+      "id": "header4",
+      "parentID": "wrapper4",
+      "children": [
+        "inputElement"
+      ]
+    }
+  ],
+  [
+    {
+      "type": "Element",
+      "value": "Hallo",
+      "id": "element0",
+      "parentID": "wrapper0",
+      "children": []
+    },
+    {
+      "type": "Element",
+      "value": "ich",
+      "id": "element1",
+      "parentID": "wrapper0",
+      "children": []
+    },
+    {
+      "type": "Element",
+      "value": "möchte",
+      "id": "element2",
+      "parentID": "wrapper0",
+      "children": []
+    },
+    {
+      "type": "Element",
+      "value": "was",
+      "id": "element3",
+      "parentID": "wrapper0",
+      "children": []
+    },
+    {
+      "type": "Element",
+      "value": "teste",
+      "id": "element4",
+      "parentID": "wrapper0",
+      "children": []
+    },
+    {
+      "type": "Element",
+      "value": "was da los?",
+      "id": "element5",
+      "parentID": "wrapper0",
+      "children": []
+    },
+    {
+      "type": "Element",
+      "value": "titts",
+      "id": "element6",
+      "parentID": "wrapper2",
+      "children": [
+        "input6",
+        "wrapper1",
+        "wrapper2",
+        "wrapper3",
+        "wrapper4",
+        "wrapper2"
+      ]
+    }
+  ]
 ]

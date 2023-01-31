@@ -22,18 +22,21 @@
 </nav>
 
 <div class="" id="content">
-    <div class="kanban" id="open" ondrop="drop(event)" ondragover="allowDrop(event)">
-        <div class="wrapper" id="wrapper0" ondblclick="createNewElement(event)">
+    <div class="kanban" id="open">
+        <div class="wrapper" id="wrapper0" ondblclick="createNewElement(event)" ondragover="allowDrop(event)"
+             ondrop="drop(event)">
             <p class="kanbanHeader" id="header0" ondblclick="editElement(event)">To do</p>
         </div>
     </div>
-    <div class="kanban" id="working" ondrop="drop(event)" ondragover="allowDrop(event)" ondblclick="editElement(event)">
-        <div class="wrapper" id="wrapper1" ondblclick="createNewElement(event)">
+    <div class="kanban" id="working">
+        <div class="wrapper" id="wrapper1" ondblclick="createNewElement(event)" ondragover="allowDrop(event)"
+             ondrop="drop(event)">
             <p class="kanbanHeader" id="header1" ondblclick="editElement(event)">Doing</p>
         </div>
     </div>
-    <div class="kanban" id="closed" ondrop="drop(event)" ondragover="allowDrop(event)" ondblclick="editElement(event)">
-        <div class="wrapper" id="wrapper2" ondblclick="createNewElement(event)">
+    <div class="kanban" id="closed">
+        <div class="wrapper" id="wrapper2" ondblclick="createNewElement(event)" ondragover="allowDrop(event)"
+             ondrop="drop(event)">
             <p class="kanbanHeader" id="header2" ondblclick="editElement(event)">Done</p>
         </div>
     </div>

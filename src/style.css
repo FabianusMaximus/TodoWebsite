@@ -53,7 +53,7 @@ button > span, button > img {
     padding: 10px;
     text-align: center;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-    line-break: auto;
+    word-break: break-word;
 }
 
 .input, .headInput {
@@ -79,7 +79,7 @@ button > span, button > img {
     padding: 10px;
     font-weight: bold;
     height: 2em;
-    line-break: auto;
+    word-break: break-word;
 }
 
 .kanban {

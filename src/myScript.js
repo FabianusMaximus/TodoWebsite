@@ -1,5 +1,5 @@
 class ListElement {
-    constructor(value = ".", id, parentID = "", children = null) {
+    constructor(value = ".", id, parentID = "", children = []) {
         this.type = value !== "" || parentID !== "" || id !== undefined ? "Element" : "Placeholder";
         this.value = value;
         this.id = id;
@@ -7,15 +7,13 @@ class ListElement {
         this.children = children;
     }
 }
-const test = $.getJSON("Data.json");
-console.log(test);
-const boards = [];
+
+let boards = [];
 const header = [
-    new ListElement("To do", "header0" ,"wrapper0"),
-    new ListElement("Doing", "header1" ,"wrapper1"),
-    new ListElement("Done", "header2" ,"wrapper2")
-];
-const elements = [];
+    new ListElement("To do", "header0", "wrapper0"),
+    new ListElement("Doing", "header1", "wrapper1"),
+    new ListElement("Done", "header2", "wrapper2")];
+let elements = [];
 const colors = ["#ff8585", "#fffb85", "#9dff85", "#85ffd8", "#85b0ff", "#c485ff", "#ff85eb"];
 let numberOfElements = elements.length;
 let numberOfBoards;
@@ -34,6 +32,7 @@ function drag(ev) {
 function drop(ev) {
     ev.preventDefault();
     let data = ev.dataTransfer.getData("text");
+    getElementByID(data).children.push(ev.target.id);
     getElementByID(data).parentID = ev.target.id;
     ev.target.appendChild(document.getElementById(data));
     updateJSON();
@@ -41,10 +40,9 @@ function drop(ev) {
 
 function appendNewBoard() {
     let board = createBoard();
-    let content = document.getElementById("content").appendChild(board);
-    boards.push(new ListElement("", board.id, content.id));
-    header.push(new ListElement(board.firstChild.textContent, board.firstChild.firstChild.id, board.id));
+    document.getElementById("content").appendChild(board);
     document.getElementById("inputElement").focus();
+    boards.push(convertElement(board));
     updateJSON();
 }
 
@@ -52,25 +50,23 @@ function createNewElement(ev) {
     ev.stopImmediatePropagation();
     let target = document.getElementById(ev.target.id);
     let element = createElement();
-    elements.push(new ListElement("", element.id, target.id));
-    updateJSON();
     let inputElement = createInputElement()
     element.replaceChildren(inputElement);
     target.appendChild(element);
     inputElement.focus();
+
+    elements.push(convertElement(element));
+    updateJSON();
     ++numberOfElements;
 }
 
 function saveInput(ev) {
     ev.stopPropagation();
     let target = document.getElementById(ev.target.id);
-    let parentElementID = target.parentElement.id;
-    console.log("parentElementID: ", parentElementID);
-    let parentElement = getElementByID(parentElementID);
-    console.log(parentElement);
-    parentElement.value = target.value; //setzt den Value des Objekts
-    console.log("Target Parent Element: ", target.parentElement);
-    target.parentElement.innerText = target.value;
+    let parentElement = target.parentElement;
+    let value = target.value;
+    getElementByID(parentElement.id).value = value; //setzt den Value des Objekts
+    parentElement.innerText = value;
     updateJSON();
 }
 
@@ -113,52 +109,95 @@ function createBoard(value = "", id = numberOfBoards) {
     let boardElement = document.createElement("div");
     boardElement.id = `kanban${id}`;
     boardElement.className = "kanban";
-    let index = numberOfBoards % 7;
-    console.log("index: ", index);
-    boardElement.style.backgroundColor = colors[index];
-    boardElement.addEventListener("drop", ev => drop(ev));
-    boardElement.addEventListener("drag", ev => allowDrop(ev));
+    boardElement.style.backgroundColor = colors[numberOfBoards % 7];
+
 
     let wrapperElement = document.createElement("div");
     wrapperElement.className = "wrapper";
     wrapperElement.id = `wrapper${id}`;
     wrapperElement.addEventListener("dblclick", ev => createNewElement(ev));
+    wrapperElement.addEventListener("drop", ev => drop(ev));
+    wrapperElement.addEventListener("dragover", ev => allowDrop(ev));
 
     let headerElement = document.createElement("p");
     headerElement.id = `header${id}`;
+    headerElement.innerText = value;
     headerElement.className = "kanbanHeader";
     headerElement.addEventListener("dblclick", ev => editElement(ev));
 
-    let inputElement = document.createElement("input");
-    inputElement.className = "headInput";
-    inputElement.id = "inputElement";
-    inputElement.addEventListener("focusout", ev => saveInput(ev));
-    inputElement.addEventListener("keypress", ev => enterPresses(ev));
-    inputElement.value = "";
-    inputElement.focus();
+    if (value === "") {
+        let inputElement = document.createElement("input");
+        inputElement.className = "headInput";
+        inputElement.id = "inputElement";
+        inputElement.addEventListener("focusout", ev => saveInput(ev));
+        inputElement.addEventListener("keypress", ev => enterPresses(ev));
+        inputElement.value = "";
+        inputElement.focus();
 
-    headerElement.appendChild(inputElement);
+        headerElement.appendChild(inputElement);
+    }
+
     wrapperElement.appendChild(headerElement);
     boardElement.appendChild(wrapperElement);
 
+    header.push(convertElement(headerElement));
     ++numberOfBoards;
 
     return boardElement;
 }
 
+function convertElement(element) {
+    return new ListElement(element.value, element.id, element.parentElement.id, getChildIDs(element));
+}
+
+function getChildIDs(HTMLElement) {
+    let childIDs = []
+    let children = HTMLElement.childNodes;
+    console.log(children);
+    for (let i = 0; i < children.length; i++) {
+        childIDs.push(children[i].id);
+    }
+    return childIDs;
+}
+
 
 function buildObjects() {
-    numberOfBoards = document.getElementsByClassName("kanban").length;
-    for (const board of boards) {
-        let boardElement = createBoard();
-        boardElement.id = board.id;
+    $.getJSON("Data.json", json => {
+        numberOfBoards = document.getElementsByClassName("kanban").length;
+        boards = json[0];
+        console.log(boards);
+        for (const board of boards) {
+            let boardElement = createBoard();
+            let header = json[1];
+            console.log("Header:", header)
+            setHeader(boardElement, header);
+            console.log(boardElement);
+            boardElement.id = board.id;
+            document.getElementById(board.parentID).appendChild(boardElement);
+        }
+        elements = json[2];
+        numberOfElements = elements.length;
+        console.log(elements);
+        for (const element of elements) {
+            let paragraphElement = createElement();
+            paragraphElement.id = element.id;
+            paragraphElement.innerText = element.value;
+            document.getElementById(element.parentID).appendChild(paragraphElement);
+        }
+    });
+}
+
+function setHeader(bordElement, listElements) {
+    const wrapperID = bordElement.firstChild.id;
+    let target = bordElement.firstChild.firstChild;
+    let value;
+    for (const listElement of listElements) {
+        if (listElement.parentID === wrapperID) {
+            value = listElement.value;
+        }
     }
-    for (const element of elements) {
-        let paragraphElement = createElement();
-        paragraphElement.id = element.id;
-        paragraphElement.innerText = element.value;
-        document.getElementById(element.parentID).appendChild(paragraphElement);
-    }
+    target.innerText = value;
+    getElementByID(target.id).value = value;
 }
 
 function getElementByID(id = "") {
@@ -181,7 +220,17 @@ function getElementByID(id = "") {
 }
 
 function updateJSON() {
-    console.log("Boards: ", JSON.stringify(boards));
-    console.log("Header: ", JSON.stringify(header));
-    console.log("Elements: ", JSON.stringify(elements));
+    let everything = [boards, header, elements];
+    let jsonString = JSON.stringify(everything);
+    console.log(jsonString);
+    /*
+    fs.writeFile("Data.json", jsonString, (err) => {
+        if (err) {
+            console.error(err);
+            return false;
+        }
+    });
+    console.log("Data has been Written");
+     */
 }
+
