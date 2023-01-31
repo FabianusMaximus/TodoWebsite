@@ -8,8 +8,11 @@ class ListElement {
     }
 }
 
+const boards = [];
+const header = [];
 const elements = [];
 let numberOfElements = elements.length;
+let numberOfBoards;
 
 document.addEventListener('DOMContentLoaded', buildObjects, false);
 
@@ -30,6 +33,14 @@ function drop(ev) {
     updateJSON();
 }
 
+function appendNewBoard() {
+    let board = createBoard();
+    let content = document.getElementById("content").appendChild(createBoard());
+    boards.push(new ListElement("", board.id, content.id));
+    header.push(new ListElement(board.firstChild.textContent, board.firstChild.id, board.id));
+    updateJSON();
+}
+
 function createNewElement(ev) {
     ev.stopImmediatePropagation();
     let target = document.getElementById(ev.target.id);
@@ -46,7 +57,9 @@ function createNewElement(ev) {
 function saveInput(ev) {
     ev.stopPropagation();
     let target = document.getElementById(ev.target.id);
-    getElementByID(ev.target.parentElement.id).value = target.value;
+    console.log(target);
+    getElementByID(ev.target.parentElement.id).value = target.value; //setzt den Value des Objekts
+    console.log("Target Parent Element: ", target.parentElement);
     target.parentElement.innerText = target.value;
     updateJSON();
 }
@@ -86,8 +99,45 @@ function createInputElement(value = "", id = numberOfElements) {
     return inputElement;
 }
 
+function createBoard(value = "", id = numberOfBoards) {
+    let boardElement = document.createElement("div");
+    boardElement.id = `kanban${id}`;
+    boardElement.className = "kanban";
+    boardElement.addEventListener("drop", ev => drop(ev));
+    boardElement.addEventListener("drag", ev => allowDrop(ev));
+
+    let wrapperElement = document.createElement("div");
+    wrapperElement.className = "wrapper";
+    wrapperElement.id = `wrapper${id}`;
+    wrapperElement.addEventListener("dblclick", ev => createNewElement(ev));
+
+    let headerElement = document.createElement("p");
+    headerElement.id = `header${id}`;
+    headerElement.className = "kanbanHeader";
+    headerElement.addEventListener("dblclick", ev => editElement(ev));
+
+    let inputElement = document.createElement("input");
+    inputElement.className = "headInput";
+    inputElement.id = "inputElement";
+    inputElement.addEventListener("focusout", ev => saveInput(ev));
+    inputElement.addEventListener("keypress", ev => enterPresses(ev));
+    inputElement.value = "";
+    inputElement.focus();
+
+    headerElement.appendChild(inputElement);
+    wrapperElement.appendChild(headerElement);
+    boardElement.appendChild(wrapperElement);
+
+    return boardElement;
+}
+
 
 function buildObjects() {
+    numberOfBoards = document.getElementsByClassName("kanban").length;
+    for (const board of boards) {
+        let boardElement = createBoard();
+        boardElement.id = board.id;
+    }
     for (const element of elements) {
         let paragraphElement = createElement();
         paragraphElement.id = element.id;
@@ -97,6 +147,16 @@ function buildObjects() {
 }
 
 function getElementByID(id = "") {
+    for (const board of boards) {
+        if (board.id === id) {
+            return board;
+        }
+    }
+    for (const head of header) {
+        if (head.id === id) {
+            return head;
+        }
+    }
     for (const element of elements) {
         if (element.id === id) {
             return element
@@ -106,5 +166,7 @@ function getElementByID(id = "") {
 }
 
 function updateJSON() {
-    console.log(JSON.stringify(elements));
+    console.log("Boards: ", JSON.stringify(boards));
+    console.log("Header: ", JSON.stringify(header));
+    console.log("Elements: ", JSON.stringify(elements));
 }

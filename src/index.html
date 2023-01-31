@@ -12,6 +12,13 @@
 </head>
 <body>
 
+<nav class="navigation" id="navigation1">
+    <button class="button" id="addStep" onclick="appendNewBoard()">
+        <img alt="plus" id="plusImage" src="../img/plus.png">
+        <span>Schritt hinzufügen</span>
+    </button>
+</nav>
+
 <div class="" id="content">
     <div class="kanban" id="open" ondrop="drop(event)" ondragover="allowDrop(event)">
         <div class="wrapper" id="wrapper0" ondblclick="createNewElement(event)">
