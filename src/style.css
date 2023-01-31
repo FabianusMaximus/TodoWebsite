@@ -15,7 +15,9 @@ button > span, button > img {
 }
 
 .navigation {
+    width: 98vw;
     background-color: white;
+    position: fixed;
 }
 
 .button {
@@ -51,7 +53,7 @@ button > span, button > img {
     padding: 10px;
     text-align: center;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-    line-break: anywhere;
+    line-break: auto;
 }
 
 .input, .headInput {
@@ -77,11 +79,12 @@ button > span, button > img {
     padding: 10px;
     font-weight: bold;
     height: 2em;
+    line-break: auto;
 }
 
 .kanban {
     margin: 10px;
-    width: 200px;
+    min-width: 200px;
     height: 100%;
     vertical-align: top;
     flex: 1;
@@ -103,6 +106,7 @@ button > span, button > img {
 }
 
 #content {
+    padding-top: 50px;
     display: flex;
 }
 

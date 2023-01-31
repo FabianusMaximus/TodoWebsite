@@ -7,10 +7,16 @@ class ListElement {
         this.children = children;
     }
 }
-
+const test = $.getJSON("Data.json");
+console.log(test);
 const boards = [];
-const header = [];
+const header = [
+    new ListElement("To do", "header0" ,"wrapper0"),
+    new ListElement("Doing", "header1" ,"wrapper1"),
+    new ListElement("Done", "header2" ,"wrapper2")
+];
 const elements = [];
+const colors = ["#ff8585", "#fffb85", "#9dff85", "#85ffd8", "#85b0ff", "#c485ff", "#ff85eb"];
 let numberOfElements = elements.length;
 let numberOfBoards;
 
@@ -35,9 +41,10 @@ function drop(ev) {
 
 function appendNewBoard() {
     let board = createBoard();
-    let content = document.getElementById("content").appendChild(createBoard());
+    let content = document.getElementById("content").appendChild(board);
     boards.push(new ListElement("", board.id, content.id));
-    header.push(new ListElement(board.firstChild.textContent, board.firstChild.id, board.id));
+    header.push(new ListElement(board.firstChild.textContent, board.firstChild.firstChild.id, board.id));
+    document.getElementById("inputElement").focus();
     updateJSON();
 }
 
@@ -57,8 +64,11 @@ function createNewElement(ev) {
 function saveInput(ev) {
     ev.stopPropagation();
     let target = document.getElementById(ev.target.id);
-    console.log(target);
-    getElementByID(ev.target.parentElement.id).value = target.value; //setzt den Value des Objekts
+    let parentElementID = target.parentElement.id;
+    console.log("parentElementID: ", parentElementID);
+    let parentElement = getElementByID(parentElementID);
+    console.log(parentElement);
+    parentElement.value = target.value; //setzt den Value des Objekts
     console.log("Target Parent Element: ", target.parentElement);
     target.parentElement.innerText = target.value;
     updateJSON();
@@ -103,6 +113,9 @@ function createBoard(value = "", id = numberOfBoards) {
     let boardElement = document.createElement("div");
     boardElement.id = `kanban${id}`;
     boardElement.className = "kanban";
+    let index = numberOfBoards % 7;
+    console.log("index: ", index);
+    boardElement.style.backgroundColor = colors[index];
     boardElement.addEventListener("drop", ev => drop(ev));
     boardElement.addEventListener("drag", ev => allowDrop(ev));
 
@@ -127,6 +140,8 @@ function createBoard(value = "", id = numberOfBoards) {
     headerElement.appendChild(inputElement);
     wrapperElement.appendChild(headerElement);
     boardElement.appendChild(wrapperElement);
+
+    ++numberOfBoards;
 
     return boardElement;
 }

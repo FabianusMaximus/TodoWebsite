@@ -7,7 +7,9 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>TodoList</title>
     <link rel="stylesheet" href="style.css">
-    <script src="myScript.js"></script>
+    <script src="./jQuery.js"></script>
+    <script type="JSON" src="./Data.json"></script>
+    <script src="./myScript.js"></script>
 
 </head>
 <body>
@@ -15,24 +17,24 @@
 <nav class="navigation" id="navigation1">
     <button class="button" id="addStep" onclick="appendNewBoard()">
         <img alt="plus" id="plusImage" src="../img/plus.png">
-        <span>Schritt hinzufügen</span>
+        <span>Board hinzufügen</span>
     </button>
 </nav>
 
 <div class="" id="content">
     <div class="kanban" id="open" ondrop="drop(event)" ondragover="allowDrop(event)">
         <div class="wrapper" id="wrapper0" ondblclick="createNewElement(event)">
-            <p class="kanbanHeader">To do</p>
+            <p class="kanbanHeader" id="header0" ondblclick="editElement(event)">To do</p>
         </div>
     </div>
-    <div class="kanban" id="working" ondrop="drop(event)" ondragover="allowDrop(event)">
+    <div class="kanban" id="working" ondrop="drop(event)" ondragover="allowDrop(event)" ondblclick="editElement(event)">
         <div class="wrapper" id="wrapper1" ondblclick="createNewElement(event)">
-            <p class="kanbanHeader">Doing</p>
+            <p class="kanbanHeader" id="header1" ondblclick="editElement(event)">Doing</p>
         </div>
     </div>
-    <div class="kanban" id="closed" ondrop="drop(event)" ondragover="allowDrop(event)">
+    <div class="kanban" id="closed" ondrop="drop(event)" ondragover="allowDrop(event)" ondblclick="editElement(event)">
         <div class="wrapper" id="wrapper2" ondblclick="createNewElement(event)">
-            <p class="kanbanHeader">Done</p>
+            <p class="kanbanHeader" id="header2" ondblclick="editElement(event)">Done</p>
         </div>
     </div>
 </div>
