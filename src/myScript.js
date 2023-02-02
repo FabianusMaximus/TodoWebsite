@@ -8,7 +8,11 @@ class ListElement {
     }
 }
 
-let boards = [];
+const boards = [
+    new ListElement("", "kanban0", "content", ["wrapper0"]),
+    new ListElement("", "kanban1", "content", ["wrapper1"]),
+    new ListElement("", "kanban2", "content", ["wrapper2"]),
+];
 const header = [
     new ListElement("To do", "header0", "wrapper0"),
     new ListElement("Doing", "header1", "wrapper1"),
@@ -162,6 +166,14 @@ function getChildIDs(HTMLElement) {
 
 
 function buildObjects() {
+    numberOfBoards = document.getElementsByClassName("kanban").length;
+    boards.push(JSON.parse(localStorage.getItem("boards")));
+    let testHeader = localStorage.getItem("header");
+    let testElement = localStorage.getItem("elements");
+    console.log("Boards: ", boards);
+    console.log("header: ", testHeader);
+    console.log("elements: ", testElement);
+    /*
     $.getJSON("Data.json", json => {
         numberOfBoards = document.getElementsByClassName("kanban").length;
         boards = json[0];
@@ -184,7 +196,7 @@ function buildObjects() {
             paragraphElement.innerText = element.value;
             document.getElementById(element.parentID).appendChild(paragraphElement);
         }
-    });
+    });*/
 }
 
 function setHeader(bordElement, listElements) {
@@ -220,6 +232,9 @@ function getElementByID(id = "") {
 }
 
 function updateJSON() {
+    localStorage.setItem("boards", JSON.stringify(boards));
+    localStorage.setItem("header", JSON.stringify(header));
+    localStorage.setItem("elements", JSON.stringify(elements));
     let everything = [boards, header, elements];
     let jsonString = JSON.stringify(everything);
     console.log(jsonString);
