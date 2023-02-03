@@ -1,6 +1,5 @@
 class ListElement {
     constructor(value = ".", id, parentID = "", children = []) {
-        this.type = value !== "" || parentID !== "" || id !== undefined ? "Element" : "Placeholder";
         this.value = value;
         this.id = id;
         this.parentID = parentID;
@@ -8,16 +7,22 @@ class ListElement {
     }
 }
 
-const boards = [
-    new ListElement("", "kanban0", "content", ["wrapper0"]),
-    new ListElement("", "kanban1", "content", ["wrapper1"]),
-    new ListElement("", "kanban2", "content", ["wrapper2"]),
+let boards = [
+    new ListElement("ToDo", "kanban0", "content", ["wrapper0"]),
+    new ListElement("Doing", "kanban1", "content", ["wrapper1"]),
+    new ListElement("Done", "kanban2", "content", ["wrapper2"]),
 ];
-const header = [
+let header = [
     new ListElement("To do", "header0", "wrapper0"),
     new ListElement("Doing", "header1", "wrapper1"),
     new ListElement("Done", "header2", "wrapper2")];
-let elements = [];
+let elements = [
+    new ListElement("Test", "element0", "wrapper0")
+];
+
+//localStorage.setItem("boards", JSON.stringify(boards));
+//localStorage.setItem("header", JSON.stringify(header));
+
 const colors = ["#ff8585", "#fffb85", "#9dff85", "#85ffd8", "#85b0ff", "#c485ff", "#ff85eb"];
 let numberOfElements = elements.length;
 let numberOfBoards;
@@ -42,11 +47,15 @@ function drop(ev) {
     updateJSON();
 }
 
-function appendNewBoard() {
-    let board = createBoard();
+function appendNewBoard(value = "") {
+    let board = createBoard(value);
     document.getElementById("content").appendChild(board);
-    document.getElementById("inputElement").focus();
-    boards.push(convertElement(board));
+    if (value === "") {
+        document.getElementById("inputElement").focus();
+    }
+    let newBoardElement = convertElement(board);
+    newBoardElement.value = board.firstChild.firstChild.innerText;
+    boards.push(newBoardElement);
     updateJSON();
 }
 
@@ -89,13 +98,14 @@ function enterPresses(ev) {
     }
 }
 
-function createElement() {
+function createElement(value = "") {
     let element = document.createElement("p");
     element.addEventListener("dblclick", ev => editElement(ev));
     element.addEventListener("dragstart", ev => drag(ev));
     element.setAttribute("draggable", "true");
     element.id = `element${numberOfElements}`;
     element.className = "element"
+    element.innerText = value;
     return element
 }
 
@@ -157,7 +167,6 @@ function convertElement(element) {
 function getChildIDs(HTMLElement) {
     let childIDs = []
     let children = HTMLElement.childNodes;
-    console.log(children);
     for (let i = 0; i < children.length; i++) {
         childIDs.push(children[i].id);
     }
@@ -166,37 +175,19 @@ function getChildIDs(HTMLElement) {
 
 
 function buildObjects() {
-    numberOfBoards = document.getElementsByClassName("kanban").length;
-    boards.push(JSON.parse(localStorage.getItem("boards")));
-    let testHeader = localStorage.getItem("header");
-    let testElement = localStorage.getItem("elements");
-    console.log("Boards: ", boards);
-    console.log("header: ", testHeader);
-    console.log("elements: ", testElement);
-    /*
-    $.getJSON("Data.json", json => {
-        numberOfBoards = document.getElementsByClassName("kanban").length;
-        boards = json[0];
-        console.log(boards);
-        for (const board of boards) {
-            let boardElement = createBoard();
-            let header = json[1];
-            console.log("Header:", header)
-            setHeader(boardElement, header);
-            console.log(boardElement);
-            boardElement.id = board.id;
-            document.getElementById(board.parentID).appendChild(boardElement);
-        }
-        elements = json[2];
-        numberOfElements = elements.length;
-        console.log(elements);
-        for (const element of elements) {
-            let paragraphElement = createElement();
-            paragraphElement.id = element.id;
-            paragraphElement.innerText = element.value;
-            document.getElementById(element.parentID).appendChild(paragraphElement);
-        }
-    });*/
+    //numberOfBoards = document.getElementsByClassName("kanban").length;
+    numberOfBoards = 0;
+    boards = (JSON.parse(localStorage.getItem("boards")));
+    header = (JSON.parse(localStorage.getItem("header")));
+    console.log("boards", boards);
+    console.log("header", header);
+    for (const board of boards) {
+        document.getElementById("content").appendChild(createBoard(board.value));
+    }
+    elements = (JSON.parse(localStorage.getItem("elements")));
+    for (const element of elements) {
+        document.getElementById(element.parentID).appendChild(createElement(element.value));
+    }
 }
 
 function setHeader(bordElement, listElements) {
@@ -235,17 +226,5 @@ function updateJSON() {
     localStorage.setItem("boards", JSON.stringify(boards));
     localStorage.setItem("header", JSON.stringify(header));
     localStorage.setItem("elements", JSON.stringify(elements));
-    let everything = [boards, header, elements];
-    let jsonString = JSON.stringify(everything);
-    console.log(jsonString);
-    /*
-    fs.writeFile("Data.json", jsonString, (err) => {
-        if (err) {
-            console.error(err);
-            return false;
-        }
-    });
-    console.log("Data has been Written");
-     */
 }
 
