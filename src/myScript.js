@@ -8,23 +8,28 @@ class ListElement {
 }
 
 let boards = [
+    /*
     new ListElement("ToDo", "kanban0", "content", ["wrapper0"]),
     new ListElement("Doing", "kanban1", "content", ["wrapper1"]),
     new ListElement("Done", "kanban2", "content", ["wrapper2"]),
+     */
 ];
 let header = [
+    /*
     new ListElement("To do", "header0", "wrapper0"),
     new ListElement("Doing", "header1", "wrapper1"),
-    new ListElement("Done", "header2", "wrapper2")];
+    new ListElement("Done", "header2", "wrapper2")
+     */
+];
 let elements = [
-    new ListElement("Test", "element0", "wrapper0")
+    //new ListElement("Test", "element0", "wrapper0")
 ];
 
 //localStorage.setItem("boards", JSON.stringify(boards));
 //localStorage.setItem("header", JSON.stringify(header));
 
 const colors = ["#ff8585", "#fffb85", "#9dff85", "#85ffd8", "#85b0ff", "#c485ff", "#ff85eb"];
-let numberOfElements = elements.length;
+let numberOfElements;
 let numberOfBoards;
 
 document.addEventListener('DOMContentLoaded', buildObjects, false);
@@ -53,9 +58,7 @@ function appendNewBoard(value = "") {
     if (value === "") {
         document.getElementById("inputElement").focus();
     }
-    let newBoardElement = convertElement(board);
-    newBoardElement.value = board.firstChild.firstChild.innerText;
-    boards.push(newBoardElement);
+    boards.push(convertElement(board));
     updateJSON();
 }
 
@@ -106,6 +109,8 @@ function createElement(value = "") {
     element.id = `element${numberOfElements}`;
     element.className = "element"
     element.innerText = value;
+
+    ++numberOfElements;
     return element
 }
 
@@ -175,16 +180,28 @@ function getChildIDs(HTMLElement) {
 
 
 function buildObjects() {
-    //numberOfBoards = document.getElementsByClassName("kanban").length;
     numberOfBoards = 0;
-    boards = (JSON.parse(localStorage.getItem("boards")));
-    header = (JSON.parse(localStorage.getItem("header")));
-    console.log("boards", boards);
-    console.log("header", header);
-    for (const board of boards) {
-        document.getElementById("content").appendChild(createBoard(board.value));
+    numberOfElements = 0;
+    let jsonBoards = localStorage.getItem("boards");
+    let jsonHeader = localStorage.getItem("header");
+    let jsonElements = localStorage.getItem("elements");
+    console.log("Boards:", jsonBoards);
+    console.log("Header:", jsonHeader);
+    console.log("elements", jsonElements);
+    if (jsonBoards !== null) {
+        boards = JSON.parse(jsonBoards);
     }
-    elements = (JSON.parse(localStorage.getItem("elements")));
+    if (jsonHeader !== null) {
+        header = JSON.parse(jsonHeader);
+    }
+    if (jsonElements !== null) {
+        elements = JSON.parse(jsonElements);
+    }
+    for (const board of boards) {
+        let id = board.id.split("n")[2];
+        let value = getElementByID(`header${id}`).value;
+        document.getElementById("content").appendChild(createBoard(value)); //TODO überarbeiten
+    }
     for (const element of elements) {
         document.getElementById(element.parentID).appendChild(createElement(element.value));
     }
